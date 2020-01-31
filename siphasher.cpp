@@ -14,10 +14,7 @@ SipHasher::SipHasher(): SipHasher(SipHasher::DEFAULT_KEY)
 
 SipHasher::SipHasher(const uint64_t key[SipHasher::KEY_SIZE])
 {
-    for (int i = 0; i < SipHasher::KEY_SIZE; i++) {
-        this->key[i] = key[i];
-    }
-    this->reset();
+    this->reset(key);
 }
 
 void SipHasher::reset()
@@ -29,6 +26,21 @@ void SipHasher::reset()
     }
     this->tail = 0;
     this->tail_count = 0;
+}
+
+void SipHasher::reset(const uint64_t key[SipHasher::KEY_SIZE])
+{
+    for (int i = 0; i < SipHasher::KEY_SIZE; i++) {
+        this->key[i] = key[i];
+    }
+    this->reset();
+}
+
+void SipHasher::get_key(uint64_t output[SipHasher::KEY_SIZE]) const
+{
+    for (int i = 0; i < SipHasher::KEY_SIZE; i++) {
+        output[i] = this->key[i];
+    }
 }
 
 SipHasher &SipHasher::operator << (unsigned char data)
@@ -54,7 +66,7 @@ SipHasher &SipHasher::operator << (unsigned char data)
     return *this;
 }
 
-uint64_t SipHasher::finish()
+uint64_t SipHasher::finish() const
 {
     uint64_t state[SipHasher::STATE_SIZE];
     for (int i = 0; i < SipHasher::STATE_SIZE; i++) {

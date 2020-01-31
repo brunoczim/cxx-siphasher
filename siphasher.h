@@ -43,6 +43,17 @@ class SipHasher {
         void reset();
 
         /**
+         * Resets the hasher internal state, and also sets a new key. Useful to
+         * compute another hash using the same hasher.
+         */
+        void reset(const uint64_t key[SipHasher::KEY_SIZE]);
+
+        /**
+         * Copies the key into output.
+         */
+        void get_key(uint64_t output[SipHasher::KEY_SIZE]) const;
+
+        /**
          * Feeds the hasher with the given input byte.
          */
         SipHasher &operator << (unsigned char data);
@@ -51,7 +62,7 @@ class SipHasher {
          * Returns the final hash based on the internal state, given the fed
          * input data.
          */
-        uint64_t finish();
+        uint64_t finish() const;
 };
 
 #endif
