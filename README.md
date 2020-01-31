@@ -24,6 +24,13 @@ int main(int argc, char const **argv)
     hasher << 'b';
     std::cout << hasher.finish() << std::endl;
 
+    // Same input as the first time, same output expected.
+    hasher.reset();
+    hasher << '2' << '0' << '1';
+    hasher << 0xF5;
+    hasher << 'a';
+    std::cout << hasher.finish() << std::endl;
+
     return 0;
 }
 ```
