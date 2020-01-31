@@ -45,21 +45,16 @@ void SipHasher::get_key(uint64_t output[SipHasher::KEY_SIZE]) const
 
 SipHasher &SipHasher::operator << (unsigned char data)
 {
-    int needed = 0;
     this->length += 1;
+    this->tail |= (uint64_t) data << (8 * this->tail_count);
 
     if (this->tail_count < 7) {
-        this->tail |= (uint64_t) data << (8 * this->tail_count);
         this->tail_count += 1;
     } else {
-        if (this->tail_count == 1) {
-            this->tail |= data << (8 * this->tail_count);
-            this->state[3] ^= this->tail;
-            SipHasher::c_rounds(this->state);
-            this->state[0] ^= this->tail;
-        }
-
-        this->tail_count -= 7;
+        this->state[3] ^= this->tail;
+        SipHasher::c_rounds(this->state);
+        this->state[0] ^= this->tail;
+        this->tail_count = 0;
         this->tail = data;
     }
 
