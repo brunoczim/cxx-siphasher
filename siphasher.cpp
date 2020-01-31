@@ -20,13 +20,24 @@ SipHasher::SipHasher(const uint64_t key[SipHasher::KEY_SIZE])
     this->reset();
 }
 
+void SipHasher::reset()
+{
+    this->length = 0;
+    for (int i = 0; i < SipHasher::STATE_SIZE; i++) {
+        int index = i % SipHasher::KEY_SIZE;
+        this->state[i] = this->key[index] ^ SipHasher::INIT_STATE[i];
+    }
+    this->tail = 0;
+    this->tail_count = 0;
+}
+
 SipHasher &SipHasher::operator << (unsigned char data)
 {
     int needed = 0;
     this->length += 1;
 
     if (this->tail_count < 7) {
-        this->tail |= data << (8 * this->tail_count);
+        this->tail |= (uint64_t) data << (8 * this->tail_count);
         this->tail_count += 1;
     } else {
         if (this->tail_count == 1) {
@@ -41,17 +52,6 @@ SipHasher &SipHasher::operator << (unsigned char data)
     }
 
     return *this;
-}
-
-void SipHasher::reset()
-{
-    this->length = 0;
-    for (int i = 0; i < SipHasher::STATE_SIZE; i++) {
-        int index = i % SipHasher::KEY_SIZE;
-        this->state[i] = this->key[index] ^ SipHasher::INIT_STATE[i];
-    }
-    this->tail = 0;
-    this->tail_count = 0;
 }
 
 uint64_t SipHasher::finish()

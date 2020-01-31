@@ -1,8 +1,3 @@
-# cxx-siphasher
-C++ SipHash implementation (NOT a cryptographic hash)
-
-# Example
-```c++
 #include <iostream>
 #include "siphasher.h"
 
@@ -26,4 +21,3 @@ int main(int argc, char const **argv)
 
     return 0;
 }
-```
