@@ -3,7 +3,6 @@
 
 int main(int argc, char const **argv)
 {
-
     // Computes the hash of the inputs, '2', '0', '1', 0xF5, 'a'.
     // Should print 16868040514378186995
     SipHasher hasher;

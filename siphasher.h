@@ -1,5 +1,5 @@
-#ifndef HASHER_H
-#define HASHER_H 1
+#ifndef SIPHASHER_H
+#define SIPHASHER_H 1
 
 #include <cstdint>
 
